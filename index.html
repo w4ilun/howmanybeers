@@ -87,25 +87,9 @@
         <script>
             (function(){
 
-                var beerCount = 0;
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.onreadystatechange = function(){
-                    if(xmlhttp.readyState == XMLHttpRequest.DONE ){
-                        if(xmlhttp.status == 200) {
-                            beerCount = parseInt(xmlhttp.responseText, 10);
-                            document.getElementById("numberOfBeers").innerHTML = beerCount;
-                        }
-                        else{
-                            alert('something else other than 200 was returned');
-                        }
-                    }
-                };
-
-                xmlhttp.open("GET", "https://howmanybeers-2854a.firebaseio.com/howmanybeers.json", true);
-                xmlhttp.send();
-
                 var $beerButton = document.getElementById('addBeer');
                 var $cheers = document.getElementById('cheers');
+                var $beerCount = document.getElementById("numberOfBeers");
 
                 $beerButton.addEventListener('animationend', function(){
                     $beerButton.className = '';
@@ -115,17 +99,34 @@
                     $cheers.className = '';
                 },false);
 
-                $beerButton.onclick = function(){
-                    $beerButton.className = 'tilt';
-                    $cheers.className = 'slidein';
+                var beerCount = 0;
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function(){
+                    if(xmlhttp.readyState == XMLHttpRequest.DONE ){
+                        if(xmlhttp.status == 200) {
+                            beerCount = parseInt(xmlhttp.responseText, 10);
+                            $beerCount.innerHTML = beerCount;
+                        }
+                        else{
+                            alert('something else other than 200 was returned');
+                        }
+                    }
+                };
+                xmlhttp.open("GET", "https://howmanybeers-2854a.firebaseio.com/howmanybeers.json", true);
+                xmlhttp.send();
 
-                        var request = new XMLHttpRequest();
+                $beerButton.onclick = function(){
+                    if(typeof beerCount === "number" && isFinite(beerCount) && Math.floor(beerCount) === beerCount){
+                        beerCount++; //increment
+                        var request = new XMLHttpRequest(); //PUT request
                         request.open('PUT', 'https://howmanybeers-2854a.firebaseio.com/howmanybeers.json', true);
                         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-                        request.send(beerCount + 1);
-
+                        request.send(beerCount);
+                        $beerCount.innerHTML = beerCount; //update
+                        $beerButton.className = 'tilt'; //animate
+                        $cheers.className = 'slidein';
+                    }
                 }
-
             })();
         </script>
     </body>
