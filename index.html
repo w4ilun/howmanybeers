@@ -82,21 +82,43 @@
     <body>
         <img id="cheers" src="cheers.png" height="220" width="206">
         <h1>How Many Beers?</h1>
-        <h1>12</h1>
+        <h1 id="numberOfBeers">?</h1>
         <button id="addBeer"></button>
         <script>
-            var $beerButton = document.getElementById('addBeer');
-            var $cheers = document.getElementById('cheers');
-            $beerButton.addEventListener('animationend', function(){
-                $beerButton.className = '';
-            },false);
-            $cheers.addEventListener('animationend', function(){
-                $cheers.className = '';
-            },false);
-            $beerButton.onclick = function(){
-                $beerButton.className = 'tilt';
-                $cheers.className = 'slidein';
-            }
+            (function(){
+                
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function(){
+                    if(xmlhttp.readyState == XMLHttpRequest.DONE ){
+                        if(xmlhttp.status == 200) {
+                            document.getElementById("numberOfBeers").innerHTML = xmlhttp.responseText;
+                        }
+                        else{
+                            alert('something else other than 200 was returned');
+                        }
+                    }
+                };
+
+                xmlhttp.open("GET", "https://howmanybeers-2854a.firebaseio.com/howmanybeers.json", true);
+                xmlhttp.send();
+
+                var $beerButton = document.getElementById('addBeer');
+                var $cheers = document.getElementById('cheers');
+
+                $beerButton.addEventListener('animationend', function(){
+                    $beerButton.className = '';
+                },false);
+
+                $cheers.addEventListener('animationend', function(){
+                    $cheers.className = '';
+                },false);
+
+                $beerButton.onclick = function(){
+                    $beerButton.className = 'tilt';
+                    $cheers.className = 'slidein';
+                }
+
+            })();
         </script>
     </body>
 </html>
