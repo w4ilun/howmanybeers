@@ -93,7 +93,7 @@
                     if(xmlhttp.readyState == XMLHttpRequest.DONE ){
                         if(xmlhttp.status == 200) {
                             beerCount = parseInt(xmlhttp.responseText, 10);
-                            document.getElementById("numberOfBeers").innerHTML = parseInt;
+                            document.getElementById("numberOfBeers").innerHTML = beerCount;
                         }
                         else{
                             alert('something else other than 200 was returned');
@@ -118,6 +118,12 @@
                 $beerButton.onclick = function(){
                     $beerButton.className = 'tilt';
                     $cheers.className = 'slidein';
+
+                        var request = new XMLHttpRequest();
+                        request.open('PUT', 'https://howmanybeers-2854a.firebaseio.com/howmanybeers.json', true);
+                        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+                        request.send(beerCount + 1);
+
                 }
 
             })();
