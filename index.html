@@ -86,12 +86,14 @@
         <button id="addBeer"></button>
         <script>
             (function(){
-                
+
+                var beerCount = 0;
                 var xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function(){
                     if(xmlhttp.readyState == XMLHttpRequest.DONE ){
                         if(xmlhttp.status == 200) {
-                            document.getElementById("numberOfBeers").innerHTML = xmlhttp.responseText;
+                            beerCount = parseInt(xmlhttp.responseText, 10);
+                            document.getElementById("numberOfBeers").innerHTML = parseInt;
                         }
                         else{
                             alert('something else other than 200 was returned');
