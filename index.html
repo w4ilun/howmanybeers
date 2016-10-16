@@ -87,6 +87,7 @@
         <script>
             (function(){
 
+                var url = 'https://howmanybeers-2854a.firebaseio.com/howmanybeers.json';
                 var $beerButton = document.getElementById('addBeer');
                 var $cheers = document.getElementById('cheers');
                 var $beerCount = document.getElementById("numberOfBeers");
@@ -112,14 +113,14 @@
                         }
                     }
                 };
-                xmlhttp.open("GET", "https://howmanybeers-2854a.firebaseio.com/howmanybeers.json", true);
+                xmlhttp.open('GET', url, true);
                 xmlhttp.send();
 
                 $beerButton.onclick = function(){
                     if(typeof beerCount === "number" && isFinite(beerCount) && Math.floor(beerCount) === beerCount){
                         beerCount++; //increment
                         var request = new XMLHttpRequest(); //PUT request
-                        request.open('PUT', 'https://howmanybeers-2854a.firebaseio.com/howmanybeers.json', true);
+                        request.open('PUT', url, true);
                         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
                         request.send(beerCount);
                         $beerCount.innerHTML = beerCount; //update
@@ -127,6 +128,17 @@
                         $cheers.className = 'slidein';
                     }
                 }
+
+                function getParameterByName(name, url) {
+                    if (!url) url = window.location.href;
+                    name = name.replace(/[\[\]]/g, "\\$&");
+                    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                        results = regex.exec(url);
+                    if (!results) return null;
+                    if (!results[2]) return '';
+                    return decodeURIComponent(results[2].replace(/\+/g, " "));
+                }
+
             })();
         </script>
     </body>
